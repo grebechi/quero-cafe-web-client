@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiFetch } from '../api/client';
+import { login } from '../api/client';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -9,17 +9,20 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const data = await apiFetch('/login', {
-            method: 'POST',
-            body: JSON.stringify({ username, password })
-        });
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            navigate('/dashboard');
-        } else {
-            alert('Login failed');
+        try {
+            const data = await login({ mail: username, pass: password });
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                navigate('/dashboard');
+            } else {
+                alert('Login failed');
+            }
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+            alert('Erro de conexão ou falha no servidor');
         }
     };
+    
 
     return (
         <form onSubmit={handleLogin}>

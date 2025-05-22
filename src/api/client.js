@@ -12,3 +12,15 @@ export async function apiFetch(endpoint, options = {}) {
     });
     return response.json();
 }
+
+export function login(credentials) {
+    return apiFetch('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(credentials)
+    });
+}
+
+export function getCoffeesToday() {
+    return apiFetch('/coffee/today');
+}
+
