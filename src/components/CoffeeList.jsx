@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { extractTimeFromISO } from '../utils/date';
 
 export default function CoffeeList({ coffees }) {
     function getPeriod(hour) {
@@ -21,9 +22,9 @@ export default function CoffeeList({ coffees }) {
             ) : (
                 <ul className="space-y-2">
                     {coffees.map(coffee => {
-                        const date = new Date(coffee.date_created);
-                        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        const period = getPeriod(date.getHours());
+                        const time = extractTimeFromISO(coffee.date_created);
+                        const hour = parseInt(time.split(':')[0], 10);
+                        const period = getPeriod(hour);
 
                         return (
                             <li key={coffee.id} className="text-gray-600">
