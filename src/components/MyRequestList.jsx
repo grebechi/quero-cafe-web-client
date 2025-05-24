@@ -1,13 +1,7 @@
 import { motion } from 'framer-motion';
-import { extractTimeFromISO } from '../utils/date';
+import { formatFullDateTime } from '../utils/date';
 
-export default function CoffeeList({ coffees }) {
-    function getPeriod(hour) {
-        if (hour < 12) return 'Manhã';
-        if (hour < 18) return 'Tarde';
-        return 'Noite';
-    }
-
+export default function MyRequestList({ requests }) {
     return (
         <div className="flex flex-col w-full max-w-md">
             <motion.h2
@@ -15,7 +9,7 @@ export default function CoffeeList({ coffees }) {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-                Cafés de Hoje
+                Minhas Requisições
             </motion.h2>
 
             <section
@@ -32,22 +26,18 @@ export default function CoffeeList({ coffees }) {
                     sm:max-h-60
                 "
             >
-                {coffees.length === 0 ? (
-                    <p className="text-gray-500 text-sm">Nenhum café registrado hoje.</p>
+                {requests.length === 0 ? (
+                    <p className="text-gray-500 text-sm">Nenhuma requisição registrada.</p>
                 ) : (
                     <ul className="space-y-1 text-sm">
-                        {coffees.map((coffee, index) => {
-                            const time = extractTimeFromISO(coffee.date_created);
-                            const hour = parseInt(time.split(':')[0], 10);
-                            const period = getPeriod(hour);
-
+                        {requests.map((request, index) => {
                             const itemClass = index === 0
-                                ? "text-blue-600 font-semibold" // Último café destacado
+                                ? "text-blue-600 font-semibold" // Última requisição destacada
                                 : "text-gray-700";
 
                             return (
-                                <li key={coffee.id} className={itemClass}>
-                                    {coffee.trainee_name} às {time} ({period})
+                                <li key={request.id} className={itemClass}>
+                                    {formatFullDateTime(request.date_created)}
                                 </li>
                             );
                         })}
